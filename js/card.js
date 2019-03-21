@@ -33,6 +33,7 @@
       this.container = document.querySelector("section.output")
     }
 
+
     getDisplayData() {
       return {
         display: this.display
@@ -42,13 +43,16 @@
 
 
     generate(layout, images) {
-      console.log(layout)
       layout = JSON.parse(JSON.stringify(layout))
       layout = this.adjustCardDetails(layout)
 
+      /// <<< HARD-CODED
       let fontRatio = 5
+      this.cueMargin = 0.1
+      /// HARD-CODED >>>
 
       this.images       = images
+      this.cardCount    = images.length
       this.createCues   = layout.layout === "flash"
       this.portrait     = layout.orientation === "portrait"
 
@@ -62,6 +66,7 @@
       this.borderColour = layout.borderColour[0] === "#"
                         ? layout.borderColour
                         : "#" + layout.borderColour
+
       this.borders       = layout.borders
       this.strokeStyle  = this._getStrokeStyle()
       this.fontSize     = layout.fontSize * fontRatio
@@ -74,10 +79,11 @@
       this.column       = 0
 
       this.canvasses    = []
-      this.canvassed    = []
+      this.treated      = 0
 
       this.ignored      = 0
 
+      this.container.innerHTML = ""
       images.forEach(this.prepareCard.bind(this))
     }
 
@@ -85,6 +91,7 @@
     prepareCard(cardData, index) {
       if (cardData.ignore) {
         this.ignored += 1
+        this.treated += 1
         return
       }
 
@@ -113,8 +120,8 @@
         this.addText(context, cardData, left, top)
         this.drawStroke(context, top, left)
 
-        this.canvassed[canvasIndex] += 1
-        let complete = (this.canvassed[canvasIndex] === this.pageCount)
+        this.treated += 1
+        let complete = (this.treated === this.cardCount)
 
         if (complete) {
           this._treatCompleteCanvas(canvas)
@@ -129,15 +136,15 @@
     createCue(cardData, index) {
       if (cardData.ignore) {
         this.ignored += 1
+        this.treated += 1
         return
       }
 
       index -= this.ignored
 
       let title = cardData.title
-      let border = 0.05
-      let maxWidth = this.width * (1 - 2 * border)
-      let minLeft = this.width * border
+      let maxWidth = this.width * (1 - 2 * this.cueMargin)
+      let minLeft = this.width * this.cueMargin
       let top  = (Math.floor((index % this.pageCount)/this.columns))
       let left
 
@@ -162,8 +169,8 @@
       top += (this.height + this.fontSize) / 2
       context.fillText(title, left, top, maxWidth)
 
-      this.canvassed[canvasIndex] += 1
-      let complete = (this.canvassed[canvasIndex] === this.pageCount)
+      this.treated += 1
+      let complete = (this.treated === this.cardCount)
 
       if (complete) {
         this._treatCompleteCanvas(canvas, "back")
@@ -180,7 +187,6 @@
         canvas.height      = this.canvasHeight
 
         this.canvasses[index] = canvas
-        this.canvassed[index] = 0
 
         this.container.appendChild(canvas)
       }
@@ -237,6 +243,43 @@
     }
 
 
+    addText(context, cardData, left, top) {}
+
+
+    drawStroke(context, top, left) {
+      let r = this.borderRadius
+      let x = left + r
+      let y = top
+      let quarter = Math.PI / 2
+      context.beginPath()
+      context.moveTo(x, y)
+      context.lineTo(x += this.width - 2 * r, y)
+      context.arc   (x,        y += r,  r, -quarter,    0)
+      context.lineTo(x += r,                  y += this.height - 2 * r)
+      context.arc   (x -= r,   y,       r, 0,           quarter)
+      context.lineTo(x -= this.width - 2 * r, y += r)
+      context.arc   (x,       (y -= r), r, quarter,     quarter * 2)
+      context.lineTo(x = left,                y = top + r)
+      context.arc   (left + r, top + r, r, quarter * 2, quarter * 3)
+      context.strokeStyle = this.strokeStyle
+      context.stroke()
+    }
+
+
+    _treatCompleteCanvas(canvas, isBack) {
+      if (this.createCues) {
+        this.createCues = false
+        this.canvasses.length = this.treated
+                              = this.page
+                              = this.row
+                              = this.column
+                              = this.ignored
+                              = 0
+        this.images.forEach(this.createCue.bind(this))
+      }
+    }
+
+
     _fitToRect(insertRect, frameRect, crop) {
       let ratio  = frameRect.width / insertRect.width
       let heightRatio = frameRect.height / insertRect.height
@@ -274,43 +317,6 @@
       , left: left
       , width: width
       , height: height
-      }
-    }
-
-
-    addText(context, cardData, left, top) {}
-
-
-    drawStroke(context, top, left) {
-      let r = this.borderRadius
-      let x = left + r
-      let y = top
-      let quarter = Math.PI / 2
-      context.beginPath()
-      context.moveTo(x, y)
-      context.lineTo(x += this.width - 2 * r, y)
-      context.arc   (x,        y += r,  r, -quarter,    0)
-      context.lineTo(x += r,                  y += this.height - 2 * r)
-      context.arc   (x -= r,   y,       r, 0,           quarter)
-      context.lineTo(x -= this.width - 2 * r, y += r)
-      context.arc   (x,       (y -= r), r, quarter,     quarter * 2)
-      context.lineTo(x = left,                y = top + r)
-      context.arc   (left + r, top + r, r, quarter * 2, quarter * 3)
-      context.strokeStyle = this.strokeStyle
-      context.stroke()
-    }
-
-
-    _treatCompleteCanvas(canvas, isBack) {
-      if (this.createCues) {
-        this.createCues = false
-        this.canvasses.length = this.canvassed.length
-                              = this.page
-                              = this.row
-                              = this.column
-                              = this.ignored
-                              = 0
-        this.images.forEach(this.createCue.bind(this))
       }
     }
 
