@@ -1,0 +1,170 @@
+:root {
+  --thumbnail-size: 128px;
+}
+
+body {
+  margin: 0;
+}
+
+#slave-menu div {
+  display: none;
+}
+
+#slave-menu div.active {
+  display: block;
+}
+
+div#crop-image label,
+section.layout-selector span {
+  display: inline-block;
+  width: 6em;
+}
+
+input#crop {
+  width: 1em;
+}
+
+select,
+input {
+  display: inline-block;
+  width: 16em;
+}
+
+#borders input,
+#font-size input,
+#borderRadius input,
+#margins input {
+  width: 2.45em;
+  text-align: right;
+}
+
+#borders select,
+#margins select{
+  width: 5em;
+  height: 1.6em;
+}
+
+#borderColour input {
+  width: 15.8em;
+}
+
+div.details {
+  display: none;
+}
+
+div.details.active {
+  display: block;
+}
+
+
+input#show-thumbnails {
+  position: fixed;
+  top: -20vmax;
+}
+
+input#show-thumbnails + label::before {
+  content: "Hide thumbnails";
+  background-color: #ccc;
+  border: 1px inset #999;
+}
+
+input#show-thumbnails:checked + label::before {
+  content: "Show thumbnails";
+  background-color: #aaa;
+  border: 1px outset #999;
+}
+
+input#show-thumbnails ~ div {
+  height: calc(2 * var(--thumbnail-size));
+  border: 1px inset #ccc;
+  overflow: auto;
+}
+
+input#show-thumbnails:checked ~ div {
+  display: none;
+}
+
+div#thumbnails div {
+  position: relative;
+  display: inline-block;
+  width: var(--thumbnail-size);
+  height: var(--thumbnail-size);
+  border: 1px solid black;
+  background-color: #ccc;
+  margin: -0.2em 0;
+}
+
+div#thumbnails label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1em;
+  height: 1em;
+  border: 1px solid black;
+  border-right: none;
+  border-top: none;
+  background-color: rgba(255,255,255, 0.5);
+  text-align: center;
+}
+
+div#thumbnails input {
+  position: fixed;
+  top: -2em;
+  left: 0;
+}
+
+div#thumbnails input ~ label::before {
+  color: #c00;
+  content: "✖";
+}
+
+div#thumbnails input:checked ~ label::before {
+  color: #090;
+  content: "✔";
+}
+
+div#thumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+div#thumbnails input ~ img {
+  opacity: 0.2;
+}
+
+div#thumbnails input:checked ~ img {
+  opacity: 1;
+}
+
+div#thumbnails span {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(255,255,255, 0.5);
+  font-size: 16px;
+  overflow: hidden;
+}
+
+button {
+  display: block;
+}
+
+section.output canvas {
+  width: 100%;
+}
+
+/* https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
+*/
+
+@media print {
+  .layout-selector {
+    display: none;
+  }
+
+  .output {
+    background-color: #99c;
+  }
+}

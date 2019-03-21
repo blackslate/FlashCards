@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  <title>Flash Card generator</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+  <section class="layout-selector">
+    <h1>Select images for cards</h1>
+    <div class="settings">
+      <div id="master-menu">
+        <span>Shape:</span>
+        <select name="shape">
+          <!-- <option disabled value="Half">
+            Two to a page (1 x 2)
+          </option>
+          <option disabled value="TwoXtwo">
+            Four to a page (2 x 2)
+          </option>
+          <option value="ThreeXthree">
+            Nine to a page (3 x 3)
+          </option>
+          <option disabled>
+            ——————————————
+          </option>
+          <option disabled value="SquareX6">
+            Third max square (2 x 3)
+          </option>
+          <option disabled value="SquareX12">
+            Third min square (3 x 4)
+          </option>
+          <option disabled value="SquareX20">
+            Quarter min square (4 x 5)
+          </option>
+          <option disabled>
+            ——————————————
+          </option>
+         <option value="Playing-card">
+           Playing card (2.5" x 3.5")
+          </option>
+          <option disabled>
+            ——————————————
+          </option>
+          <option value="Hex-dobble">
+            Hexagonal Dobble (31 images)
+          </option>
+          <option value="Round-dobble">
+            Round dobble (57 images)
+          </option> -->
+        </select>
+      </div>
+
+      <div id="slave-menu">
+        <div id="standard">
+          <span>Layout:</span>
+          <select name="layout">
+            <option value="simple">
+              Single-sided
+            </option>
+            <option selected value="flash">
+              Flashcards
+            </option>
+            <option value="power" class="details">
+              Power cards
+            </option>
+            <option value="multi" class="details">
+              Multi cards
+            </option>
+          </select>
+        </div>
+
+        <div id="dobble">
+          <span>Layout:</span>
+          <select name="layout">
+            <option value="initial">
+              Name and initial
+            </option>
+            <option value="name">
+              Name only
+            </option>
+            <option value="randomized">
+              Randomized
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div id="crop-image">
+        <label for="crop">Crop Image:</label>
+        <input type="checkbox" name="crop" id="crop">
+      </div>
+
+      <div id="borders"><span>Card borders:</span>
+        <input type="text" name="borderTop"    value="0"
+       ><input type="text" name="borderRight"  value="0"
+       ><input type="text" name="borderBottom" value="0"
+       ><input type="text" name="borderLeft"   value="0"
+      ><select name="units">
+          <option          value="mm">mm</option>
+          <option selected value="inches">inches</option>
+        </select>
+      </div>
+
+      <div id="borderRadius"><span>Border radius:</span>
+        <input type="text" name="borderRadius" value="2"><span>%</span>
+      </div>
+
+      <div id="borderColour"><span>Border colour:</span>
+        <input class="jscolor" name="borderColour" value="ab2567">
+      </div>
+
+      <div><span>Paper Size:</span>
+        <select name="paper">
+          <option value="a4">
+            A4
+          </option>
+          <option value="letter">
+            US Letter
+          </option>
+        </select>
+      </div>
+
+      <div><span>Orientation:</span>
+        <select name="orientation">
+          <option value="portrait">
+            Portrait
+          </option>
+          <option selected value="landscape">
+            Landscape
+          </option>
+        </select>
+      </div>
+
+      <div id="margins"><span>Page Margins:</span>
+        <input type="text" name="marginTop"    value="0.13"
+       ><input type="text" name="marginRight"  value="0.13"
+       ><input type="text" name="marginBottom" value="0.13"
+       ><input type="text" name="marginLeft"   value="0.13"
+      ><select name="units">
+          <option           value="mm">mm</option>
+          <option selected value="inches">inches</option>
+        </select>
+      </div>
+
+      <div id="font"><span>Font:</span>
+        <select name="font">
+          <option value="Arial" style="font-family:Arial;">
+            Arial
+          </option>
+          <option value="Arial Black" style="font-family:Arial Black;">
+            Arial Black
+          </option>
+          <option value="Bookman" style="font-family:Bookman;">
+            Bookman
+          </option>
+          <option value="Comic Sans MS" style="font-family:Comic Sans MS;">
+            Comic Sans MS
+          </option>
+          <option value="Courier" style="font-family:Courier;">
+            Courier
+          </option>
+          <option value="Courier New" style="font-family:Courier New;">
+            Courier New
+          </option>
+          <option value="Garamond" style="font-family:Garamond;">
+            Garamond
+          </option>
+          <option value="Georgia" style="font-family:Georgia;">
+            Georgia
+          </option>
+          <option value="Helvetica" style="font-family:Helvetica;">
+            Helvetica
+          </option>
+          <option value="Impact" style="font-family:Impact;">
+            Impact
+          </option>
+          <option selected value="Kalam" style="font-family:Kalam;">
+            Kalam
+          </option>
+          <option value="Palatino" style="font-family:Palatino;">
+            Palatino
+          </option>
+          <option value="Times New Roman" style="font-family:Times New Roman;">
+            Times New Roman
+          </option>
+          <option value="Times" style="font-family:Times;">
+            Times
+          </option>
+          <option value="Trebuchet MS" style="font-family:Trebuchet MS;">
+            Trebuchet MS
+          </option>
+          <option value="Verdana" style="font-family:Verdana;">
+            Verdana
+          </option>
+          <option disabled>——————————————</option>
+          <option value="other" style="font-family:Other...;">
+            Other...
+          </option>
+        </select>
+      </div>
+
+      <div id="font-size"><span>Font Size:</span>
+        <input type="text" name="fontSize" value="72"
+      </div>
+    </div>
+
+    <div class="file-reader">
+      <div><span>Images:</span>
+        <input id="images" type="file" multiple accept="image/*">
+      </div>
+
+      <div class="details">
+        <span>Details:</span>
+        <input id="details" type="file" accept=".txt" disabled>
+      </div>
+    </div>
+
+    <input type="checkbox" id="show-thumbnails" checked_>
+    <label for="show-thumbnails"></label>
+    <div id="thumbnails">
+    </div>
+
+    <button type="button">Generate Cards</button>
+  </section>
+
+  <section class="output">
+  </section>
+
+  <!-- SCRIPTS SCRIPTS SCRIPTS SCRIPTS SCRIPTS SCRIPTS SCRIPTS -->
+  <script src="lib/jscolor.js"></script>
+
+  <script src="js/image.js"></script>
+  <script src="js/card.js"></script>
+  <script src="js/threeXThree.js"></script>
+  <script src="js/dobble.js"></script>
+
+  <script src="js/imageReader.js"></script>
+  <script src="js/layoutSelector.js"></script>
+  <script src="js/cardGenerator.js"></script>
+
+  <script src="js/master.js"></script>
+</body>
+</html>
