@@ -115,10 +115,10 @@
         let canvas  = this.getCanvas(canvasIndex)
         let context = canvas.getContext("2d")
 
-        this.drawBorder(context, top, left)
+        this.drawBorder(context, left, top)
         this.drawCard(context, image, left, top)
         this.addText(context, cardData, left, top)
-        this.drawStroke(context, top, left)
+        this.drawStroke(context, left, top)
 
         this.treated += 1
         let complete = (this.treated === this.cardCount)
@@ -164,10 +164,20 @@
       let context = canvas.getContext("2d")
       context.font = this.titleFont
 
+      this.drawStroke(context, left - this.width / 2, top)
+
+      top += (this.height / 2)
+
       let width = Math.min(context.measureText(title).width, maxWidth)
-      left -= width / 2
-      top += (this.height + this.fontSize) / 2
-      context.fillText(title, left, top, maxWidth)
+      context.save()
+      context.translate(left, top)
+      if (!this.portrait) {
+        context.rotate(Math.PI)
+      }
+      left = -width / 2
+      context.fillText(title, left, this.fontSize / 4, maxWidth)
+      context.restore()
+
 
       this.treated += 1
       let complete = (this.treated === this.cardCount)
@@ -195,9 +205,8 @@
     }
 
 
-    drawBorder(context, top, left, colour) {
+    drawBorder(context, left, top, colour) {
       context.beginPath()
-      context.fillStyle = this.borderColour
       context.rect(left, top, this.width, this.height)
       context.fill()
 
@@ -246,7 +255,7 @@
     addText(context, cardData, left, top) {}
 
 
-    drawStroke(context, top, left) {
+    drawStroke(context, left, top) {
       let r = this.borderRadius
       let x = left + r
       let y = top
